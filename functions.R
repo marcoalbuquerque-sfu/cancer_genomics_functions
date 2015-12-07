@@ -160,7 +160,7 @@ join_gene_list <- function(mutsig=NULL, oncodrive=NULL, other=NULL) {
             data <- oncodrive;
             }
         else {
-            data <- rbind(data, oncodrive);
+            data <- rbind(data, oncodrive);calculate
             }
 	    }
 
@@ -192,5 +192,8 @@ read_titan_params_file <- function(params_file) {
     }
 
 fetch_validity_index <- function(params_frame) {
-    return(as.numeric(params_frame[17,5]))
+
+    truth <- data[,1] == "S_Dbw" & data[,2] == "validity" &  data[,3] == "index" & data[,4] == "(Both):";
+
+    return(as.numeric(params_frame[truth,5]))
     }
