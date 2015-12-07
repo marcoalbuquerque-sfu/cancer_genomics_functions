@@ -178,3 +178,19 @@ join_gene_list <- function(mutsig=NULL, oncodrive=NULL, other=NULL) {
 	return(data)
 
     }
+
+read_titan_params_file <- function(params_file) {
+
+    data <- read.table(
+        params_file,
+        fill = TRUE,
+        stringsAsFactors=FALSE
+        )
+   
+    return(data)
+
+    }
+
+fetch_validity_index <- function(params_frame) {
+    return(as.numeric(params_frame[17,5]))
+    }
