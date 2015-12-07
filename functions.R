@@ -86,21 +86,6 @@ generate_common_genome_frame <- function() {
 
     }
 
-read_bam_for_genome_frame <- function(bam_file) {
-
-
-
-
-    }
-
-
-read_genome_frame <- function() {
-
-
-
-    }
-
-
 calculate_percent_genome_alteration <- function(cnv_frame, genome_frame) {
     
     truth <- !cnv_frame$copy == 2;
@@ -196,50 +181,3 @@ join_gene_list <- function(mutsig=NULL, oncodrive=NULL, other=NULL) {
 	return(data)
 
     }
-
-get_cnv_matrix <- function(cnv_dataframe, gene_reference, gene_list) {
-    
-
-    
-
-
-
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-gene_list <- join_gene_list(
-    mutsig = filter_gene_list( read_mutsigCV_genes(mutsig) ),
-    oncodrive = filter_gene_list( read_oncodriveFM_genes(file) )
-	)
-
-genome_frame <- generate_common_genome_frame();
-titan_segs <- list.files(path="~/morinlab/Galaxy/analysis/lohr/parallel/titan/segs", pattern="*.seg", full.names=T);
-data <- lapply(titan_segs, read_titan_cnv_file)
-pga <- lapply(data, function(x) { return(calculate_percent_genome_alteration(x, genome_frame ))   } )
-
-data <- read.table("list_of_genes.txt", stringsAsFactors=F)
-interest <- read.table("list_of_important.txt", stringsAsFactors=F)[,1]
-truth <- data$V4 %in% interest
-data[truth,]
-
-for 
-
-
-
-
-
-
-
-
-
