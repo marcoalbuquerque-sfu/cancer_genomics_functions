@@ -1,6 +1,3 @@
-library(Rsamtools)
-
-
 read_biomart_gene_file <- function(biomart_gene_file) {
 
     data <- read.table(
