@@ -178,15 +178,14 @@ calculate_patient_snv_counts <- function(snv_frame) {
     order <- order(binned_data, decreasing=TRUE);
     output <- binned_data[order];
 
-    output <- data.frame(
-        patient = names(output),
-        counts = as.numeric(output),
+    output2 <- data.frame(
+        snv_counts = as.numeric(output),
         stringsAsFactors = F
         )
 
-    rownames(output) <- output$patient
+    rownames(output2) <- names(output);
 
-    return(output);
+    return(output2);
 
     }
 
@@ -195,8 +194,6 @@ calculate_patient_snv_frequency <- function(snv_frame) {
     data <- snv_frame[,c('patient','ref','alt','variant_type')];
     data <- data[data$variant_type == "SNP",];
 
-    print ("A");
-
     truth <- data$ref == "A";
     data[truth,]$ref = "T";
     data[truth,]$alt = as.character(base_pairs[data[truth,]$alt]);
@@ -204,8 +201,6 @@ calculate_patient_snv_frequency <- function(snv_frame) {
     truth <- data$ref == "G";
     data[truth,]$ref = "C";
     data[truth,]$alt = as.character(base_pairs[data[truth,]$alt]);
-
-    print ("B");
 
     data <- data.frame(
         patient = data$patient,
@@ -222,10 +217,6 @@ calculate_patient_snv_frequency <- function(snv_frame) {
 
     tmp <- table(data);
 
-    print(tmp);
-
-    print ("C");
-
     num_vars <- apply(tmp, 1, sum);
 
     tmp <- tmp / num_vars;
@@ -235,8 +226,6 @@ calculate_patient_snv_frequency <- function(snv_frame) {
             output[output$patient == patient & output$category == category,]$counts <- tmp[patient, category];
             }
         }
-
-    print ("D");
 
     return(output);
 
@@ -254,6 +243,7 @@ read_vcf2maf_maf <- function(vcf2maf_file) {
         quote='"'
         )
 
+    print(names(data))
     output <- data.frame(
         gene = data$Hugo_Symbol,
         patient = data$Tumor_Sample_Barcode,
@@ -262,6 +252,7 @@ read_vcf2maf_maf <- function(vcf2maf_file) {
         end = data$End_Position,
         variant_class = data$Variant_Classification,
         variant_type = data$Variant_Type,
+        ensembl_variant_class = data$Consequence,
         ref = data$Reference_Allele,
         alt = data$Tumor_Seq_Allele2,
         impact = rep("", nrow(data)),
@@ -320,23 +311,42 @@ read_oncodriveFM_genes <- function(oncodriveFM_file) {
     data <- read.table(
     	oncodriveFM_file,
     	stringsAsFactors=F,
-        header=T
+        header=T,
+        sep="\t"
     	)
 
     data <- data[,c(1,2,3)]
 
     data <- data.frame(
-        "gene"=rownames(data),
-        "p.value"=data[,1],
-        "q.value"=data[,2],
+        "gene"=data[,1],
+        "p.value"=data[,2],
+        "q.value"=data[,3],
         stringsAsFactors=F
     	)
+
+    print(data)
 
     rownames(data) <- data$gene;
 
     data <- data[order(data$p.value),]
 
     return(data)
+
+    }
+
+read_patient_covariate_data <- function(patient_file) {
+
+    data <- read.table(
+        patient_file,
+        header=T,
+        stringsAsFactors=F,
+        comment.char=''
+        );
+
+    rownames(data) <- data[,1];
+    colnames(data)[1] <- "patient";
+
+    return (data);
 
     }
 
