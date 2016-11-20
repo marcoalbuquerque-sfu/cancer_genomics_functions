@@ -179,6 +179,7 @@ calculate_patient_snv_counts <- function(snv_frame) {
     output <- binned_data[order];
 
     output2 <- data.frame(
+        patient = names(output),
         snv_counts = as.numeric(output),
         stringsAsFactors = F
         )
